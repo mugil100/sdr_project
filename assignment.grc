@@ -237,16 +237,16 @@ blocks:
       \ in [_PROJECT_DIR, _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0,\
       \ _p)\n\ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n\
       \    CUSTOM_OBJECTS = {}\n\nclass blk(gr.basic_block):\n    def __init__(self,\
-      \ model_path=os.path.join(_PROJECT_DIR,'models','saved_models','encoder_fading.keras')):\n\
+      \ model_path=os.path.join(_PROJECT_DIR,'flat_fading_results','encoder_fading.keras')):\n\
       \        gr.basic_block.__init__(self, name='ML Encoder',\n            in_sig=[np.uint8],\
       \ out_sig=[np.complex64])\n        self.k = 8   #  8 bits \u2192 values 0-15\n\
       \        self.n = 4   # 4 complex symbols output\n        candidates = [\n \
-      \           os.path.join(_PROJECT_DIR,'models','saved_models','encoder_fading.keras'),\n\
+      \           os.path.join(_PROJECT_DIR,'flat_fading_results','encoder_fading.keras'),\n\
       \            os.path.join(_PROJECT_DIR,'saved_models','encoder_fading.keras'),\n  \
       \          model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Encoder] No model found. Run: cd models &&\
-      \ python train.py --k 4')\n        print(f'[ML Encoder] Loading: {resolved}')\n\
+      \ python train.py --k 8 --use_fading')\n        print(f'[ML Encoder] Loading: {resolved}')\n\
       \        self.encoder = tf.keras.models.load_model(resolved, compile=False,\
       \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Encoder] Ready ({self.k}\
       \ bits -> {self.n} symbols)')\n\n    def general_work(self, input_items, output_items):\n\
@@ -284,16 +284,16 @@ blocks:
       \  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR, _MODELS_DIR]:\n\
       \    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\ntry:\n    from\
       \ autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n    CUSTOM_OBJECTS\
-      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'models','saved_models','decoder_fading.keras')):\n\
+      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras')):\n\
       \        gr.basic_block.__init__(self, name='ML Decoder NN',\n            in_sig=[np.complex64],\
       \ out_sig=[np.uint8])\n        self.k = 8   #  8 bits \u2192 values 0-15\n  \
       \      self.n = 4   # 4 complex symbols input\n        self._buffer = []\n \
-      \       candidates = [\n            os.path.join(_PROJECT_DIR,'models','saved_models','decoder_fading.keras'),\n\
+      \       candidates = [\n            os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras'),\n\
       \            os.path.join(_PROJECT_DIR,'saved_models','decoder_fading.keras'),\n  \
       \          model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Decoder] No model found. Run: cd models &&\
-      \ python train.py --k 4')\n        print(f'[ML Decoder] Loading: {resolved}')\n\
+      \ python train.py --k 8 --use_fading')\n        print(f'[ML Decoder] Loading: {resolved}')\n\
       \        self.decoder = tf.keras.models.load_model(resolved, compile=False,\
       \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Decoder] Ready ({self.n}\
       \ symbols -> {self.k} bits)')\n\n    def _bits_to_byte(self, bit_probs):\n \
