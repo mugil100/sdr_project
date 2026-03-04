@@ -55,19 +55,19 @@ def bits_to_byte(bits):
     return int(''.join(map(str, np.round(bits).astype(int))), 2)
 
 
-def find_model_paths(base_dir):
-    """Locate encoder and decoder model files (robust first, legacy fallback)."""
+def find_model_paths(base_dir, suffix=""):
+    """Locate encoder and decoder model files."""
     saved = os.path.join(base_dir, "models", "saved_models")
 
     enc_candidates = [
+        os.path.join(saved, f"encoder{suffix}.keras"),
         os.path.join(saved, "robust_encoder.keras"),
         os.path.join(saved, "encoder.keras"),
     ]
     dec_candidates = [
+        os.path.join(saved, f"decoder{suffix}.keras"),
         os.path.join(saved, "robust_decoder.keras"),
         os.path.join(saved, "decoder.keras"),
-        os.path.join(saved, "robust_autoencoder.keras"),
-        os.path.join(saved, "autoencoder_final.keras"),
     ]
 
     encoder_path = next((p for p in enc_candidates if os.path.exists(p)), None)
@@ -79,7 +79,7 @@ def find_model_paths(base_dir):
 # Core test function
 # ─────────────────────────────────────────────
 
-def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, n=4):
+def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, n=4, suffix=""):
     """
     Run end-to-end encoder → channel → decoder test.
 
@@ -87,7 +87,7 @@ def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, 
         dict with keys: accuracy, ber, correct, total
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    encoder_path, decoder_path = find_model_paths(base_dir)
+    encoder_path, decoder_path = find_model_paths(base_dir, suffix)
 
     if not encoder_path:
         print("ERROR: No encoder model found. Train first:\n  cd models && python train.py")
@@ -137,7 +137,7 @@ def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, 
     all_dec_bits  = []
 
     print(f"{'Idx':<5} {'Orig':<8} {'Decoded':<10} {'Match'}")
-    print("─" * 38)
+    print("-" * 38)
 
     for idx, orig_byte in enumerate(test_bytes_list):
         # Convert byte → bits
@@ -161,7 +161,7 @@ def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, 
         dec_bits = decoder.predict(noisy_in, verbose=0)[0]
         dec_byte  = bits_to_byte(dec_bits)
 
-        match = "✓" if dec_byte == orig_byte else "✗"
+        match = "OK" if dec_byte == orig_byte else "FAIL"
         if dec_byte == orig_byte:
             correct += 1
 
@@ -170,7 +170,7 @@ def test_ml_comm_system(snr_db=10.0, channel_mode='awgn', num_messages=16, k=8, 
         all_orig_bits.append(bits_to_byte(bits[0]))
         all_dec_bits.append(dec_byte)
 
-    print("─" * 38)
+    print("-" * 38)
     accuracy = correct / total * 100
     print(f"\nAccuracy: {correct}/{total} ({accuracy:.1f}%)")
 
@@ -199,16 +199,18 @@ if __name__ == "__main__":
                         help='Number of test messages (default: 16)')
     parser.add_argument('--all',     action='store_true',
                         help='Test all channel types')
+    parser.add_argument('--suffix',  type=str,   default="",
+                        help='Model suffix (e.g. "_fading", "_po_cfo")')
     args = parser.parse_args()
 
     if args.all:
         print("\n" + "=" * 70)
-        print("TESTING ALL CHANNEL TYPES")
+        print(f"TESTING ALL CHANNEL TYPES (Model Suffix: '{args.suffix}')")
         print("=" * 70)
         summary = {}
         for ch in CHANNEL_FN:
             result = test_ml_comm_system(
-                snr_db=args.snr, channel_mode=ch, num_messages=args.messages
+                snr_db=args.snr, channel_mode=ch, num_messages=args.messages, suffix=args.suffix
             )
             if result:
                 summary[ch] = result
@@ -217,17 +219,17 @@ if __name__ == "__main__":
         print("SUMMARY")
         print("=" * 70)
         print(f"{'Channel':<12} {'Accuracy':<12} {'BER'}")
-        print("─" * 38)
+        print("-" * 38)
         for ch, r in summary.items():
             print(f"{ch:<12} {r['accuracy']:.1f}%       {r['ber']:.6f}")
         print("=" * 70)
     else:
         result = test_ml_comm_system(
-            snr_db=args.snr, channel_mode=args.channel, num_messages=args.messages
+            snr_db=args.snr, channel_mode=args.channel, num_messages=args.messages, suffix=args.suffix
         )
         if result and result['accuracy'] >= 80:
-            print("\n✓ Test PASSED")
+            print("\nOK Test PASSED")
             sys.exit(0)
         else:
-            print("\n✗ Test FAILED (accuracy < 80%) — retrain or increase SNR")
+            print("\nFAIL Test FAILED (accuracy < 80%) — retrain or increase SNR")
             sys.exit(1)

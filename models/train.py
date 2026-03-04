@@ -13,18 +13,20 @@ def generate_training_data(num_samples, k=4):
     return np.random.randint(0, 2, size=(num_samples, k)).astype(np.float32)
 
 def train(k=4, n=4, snr_db=10.0, epochs=30, batch_size=256, samples=100000, 
-          use_phase_offset=False, use_cfo=False, max_cfo=0.05):
+          use_phase_offset=False, use_cfo=False, max_cfo=0.05, use_fading=False):
     save_path = 'saved_models'
     os.makedirs(save_path, exist_ok=True)
     
-    print(f"Training Autoencoder (k={k}, n={n}, SNR={snr_db}dB, PO={use_phase_offset}, CFO={use_cfo})")
+    print(f"Creating autoencoder (k={k}, n={n}, snr_db={snr_db}, po={use_phase_offset}, cfo={use_cfo}, fading={use_fading})")
     train_data = generate_training_data(samples, k)
     val_data = generate_training_data(10000, k)
     
     autoencoder, encoder, decoder = create_autoencoder(
         k=k, n=n, snr_db=snr_db, 
         use_phase_offset=use_phase_offset, 
-        use_cfo=use_cfo, max_cfo=max_cfo
+        use_cfo=use_cfo, 
+        max_cfo=max_cfo,
+        use_fading=use_fading
     )
     autoencoder = compile_model(autoencoder)
     
@@ -36,18 +38,19 @@ def train(k=4, n=4, snr_db=10.0, epochs=30, batch_size=256, samples=100000,
         verbose=1
     )
     
+    # Determine saved model names based on active impairments
     suffix = ""
-    if use_phase_offset and use_cfo:
-        suffix = "_po_cfo"
-    elif use_phase_offset:
-        suffix = "_po"
-    elif use_cfo:
-        suffix = "_cfo"
+    if use_fading:
+        suffix += "_fading"
+    if use_phase_offset:
+        suffix += "_po"
+    if use_cfo:
+        suffix += "_cfo"
 
     autoencoder.save(os.path.join(save_path, f'autoencoder_final{suffix}.keras'))
     encoder.save(os.path.join(save_path, f'encoder{suffix}.keras'))
     decoder.save(os.path.join(save_path, f'decoder{suffix}.keras'))
-    print("Models saved to models/saved_models.")
+    print("Models saved to saved_models.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -55,12 +58,14 @@ if __name__ == "__main__":
     parser.add_argument('--n', type=int, default=4)
     parser.add_argument('--epochs', type=int, default=30)
     parser.add_argument('--use_phase_offset', action='store_true', help='Enable random phase offset during training')
-    parser.add_argument('--use_cfo', action='store_true', help='Enable carrier frequency offset during training')
-    parser.add_argument('--max_cfo', type=float, default=0.05, help='Maximum normalized frequency offset')
+    parser.add_argument('--use_cfo', action='store_true', help="Enable Carrier Frequency Offset during training")
+    parser.add_argument('--max_cfo', type=float, default=0.05, help="Maximum CFO to apply")
+    parser.add_argument('--use_fading', action='store_true', help="Enable Rayleigh Flat Fading during training")
     args = parser.parse_args()
     
     train(
         k=args.k, n=args.n, epochs=args.epochs,
         use_phase_offset=args.use_phase_offset,
-        use_cfo=args.use_cfo, max_cfo=args.max_cfo
+        use_cfo=args.use_cfo, max_cfo=args.max_cfo,
+        use_fading=args.use_fading
     )

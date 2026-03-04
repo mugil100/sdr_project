@@ -137,16 +137,46 @@ class FromComplex(layers.Layer):
     def get_config(self):
         return super().get_config()
 
+@tf.keras.utils.register_keras_serializable(name='RayleighFadingChannel')
+class RayleighFadingChannel(layers.Layer):
+    """
+    Rayleigh Flat Fading channel.
+    Generates a single complex fading coefficient h ~ CN(0,1) per batch element
+    and multiplies all symbols in that element by h.
+    Only applied during training.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def call(self, inputs, training=None):
+        if training:
+            # batch size shape
+            batch_size = tf.shape(inputs)[0]
+            
+            # Generate single scalar h per batch element: (batch_size, 1)
+            # h = (randn() + j*randn()) / sqrt(2)
+            h_real = tf.random.normal([batch_size, 1]) / tf.sqrt(2.0)
+            h_imag = tf.random.normal([batch_size, 1]) / tf.sqrt(2.0)
+            h = tf.complex(h_real, h_imag)
+            
+            # Broadcast scalar h over all symbols
+            return inputs * h
+        return inputs
+        
+    def get_config(self):
+        return super().get_config()
+
 CUSTOM_OBJECTS = {
     'AWGNChannel': AWGNChannel,
     'PhaseOffsetChannel': PhaseOffsetChannel,
     'FrequencyOffsetChannel': FrequencyOffsetChannel,
+    'RayleighFadingChannel': RayleighFadingChannel,
     'PowerNormalization': PowerNormalization,
     'ToComplex': ToComplex,
     'FromComplex': FromComplex
 }
 
-def create_autoencoder(k=4, n=4, snr_db=10.0, use_phase_offset=False, use_cfo=False, max_cfo=0.05):
+def create_autoencoder(k=4, n=4, snr_db=10.0, use_phase_offset=False, use_cfo=False, max_cfo=0.05, use_fading=False):
     width = 128
     
     # ── ENCODER ──
@@ -179,6 +209,10 @@ def create_autoencoder(k=4, n=4, snr_db=10.0, use_phase_offset=False, use_cfo=Fa
 
     # ── AUTOENCODER ──
     ch_out = encoder.output
+    
+    if use_fading:
+        ch_out = RayleighFadingChannel()(ch_out)
+        
     if use_cfo:
         ch_out = FrequencyOffsetChannel(max_freq_offset=max_cfo)(ch_out)
     if use_phase_offset:
