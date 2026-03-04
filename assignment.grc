@@ -1,0 +1,641 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: assignment
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '1000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 20.0]
+    rotation: 0
+    state: enabled
+- name: blocks_char_to_float_0
+  id: blocks_char_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 160.0]
+    rotation: 0
+    state: enabled
+- name: blocks_char_to_float_0_0
+  id: blocks_char_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 424.0]
+    rotation: 0
+    state: enabled
+- name: blocks_delay_0
+  id: blocks_delay
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    delay: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    showports: 'False'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 448.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: output_bytes.bin
+    type: byte
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 236.0]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_complex_0
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1376, 96.0]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_complex_0_0
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 544.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle2_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_sink_x_0
+  id: blocks_vector_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    reserve_items: '1024'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 152.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: byte
+    vector: '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 260.0]
+    rotation: 0
+    state: enabled
+- name: channels_channel_model_0
+  id: channels_channel_model
+  parameters:
+    affinity: ''
+    alias: ''
+    block_tags: 'False'
+    comment: ''
+    epsilon: '1.0'
+    freq_offset: '0.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_voltage: '0.0'
+    seed: '0'
+    taps: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 448.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "# ROBUST ENCODER: 1 byte -> 4 complex symbols\n# k=4 bits (values\
+      \ 0-15), n=4 complex symbols\n\nimport numpy as np\nfrom gnuradio import gr\n\
+      import tensorflow as tf\nimport sys, os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/sdr\
+      \ lab/sdr lab'\n_MODELS_DIR  = os.path.join(_PROJECT_DIR, 'models')\nfor _p\
+      \ in [_PROJECT_DIR, _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0,\
+      \ _p)\n\ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n\
+      \    CUSTOM_OBJECTS = {}\n\nclass blk(gr.basic_block):\n    def __init__(self,\
+      \ model_path=os.path.join(_PROJECT_DIR,'models','saved_models','encoder.keras')):\n\
+      \        gr.basic_block.__init__(self, name='ML Encoder',\n            in_sig=[np.uint8],\
+      \ out_sig=[np.complex64])\n        self.k = 4   # 4 bits \u2192 values 0-15\n\
+      \        self.n = 4   # 4 complex symbols output\n        candidates = [\n \
+      \           os.path.join(_PROJECT_DIR,'models','saved_models','encoder.keras'),\n\
+      \            os.path.join(_PROJECT_DIR,'saved_models','encoder.keras'),\n  \
+      \          model_path,\n        ]\n        resolved = next((p for p in candidates\
+      \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
+      \     raise FileNotFoundError('[ML Encoder] No model found. Run: cd models &&\
+      \ python train.py --k 4')\n        print(f'[ML Encoder] Loading: {resolved}')\n\
+      \        self.encoder = tf.keras.models.load_model(resolved, compile=False,\
+      \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Encoder] Ready ({self.k}\
+      \ bits -> {self.n} symbols)')\n\n    def general_work(self, input_items, output_items):\n\
+      \        in_bytes, out_symbols = input_items[0], output_items[0]\n        n_process\
+      \ = min(len(in_bytes), len(out_symbols) // self.n)\n        if n_process ==\
+      \ 0:\n            return 0\n        bits_batch = np.array([\n            [int(b)\
+      \ for b in format(int(v) & 0x0F, '04b')]  # 4 bits, 0-15 only\n            for\
+      \ v in in_bytes[:n_process]\n        ], dtype=np.float32)\n        encoded =\
+      \ self.encoder.predict(bits_batch, verbose=0)\n        out_symbols[:n_process\
+      \ * self.n] = encoded.flatten()\n        self.consume(0, n_process)\n      \
+      \  return n_process * self.n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    lut_path: '""'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('ML Encoder', 'blk', [('lut_path', "'C:\\\\Users\\\\vasan\\\\OneDrive\\\\Desktop\\\\SDR
+      ASSIGNMENT\\\\models\\\\saved_models\\\\encoder.keras'")], [('0', 'byte', 1)],
+      [('0', 'complex', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 208.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "# ML NEURAL NETWORK DECODER: Uses decoder.keras directly\n# k=4\
+      \ bits (values 0-15), actual NN decoder (handles freq offset + fading)\n\nimport\
+      \ numpy as np\nfrom gnuradio import gr\nimport tensorflow as tf\nimport sys,\
+      \ os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/sdr lab/sdr lab'\n_MODELS_DIR\
+      \  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR, _MODELS_DIR]:\n\
+      \    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\ntry:\n    from\
+      \ autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n    CUSTOM_OBJECTS\
+      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'models','saved_models','decoder.keras')):\n\
+      \        gr.basic_block.__init__(self, name='ML Decoder NN',\n            in_sig=[np.complex64],\
+      \ out_sig=[np.uint8])\n        self.k = 4   # 4 bits \u2192 values 0-15\n  \
+      \      self.n = 4   # 4 complex symbols input\n        self._buffer = []\n \
+      \       candidates = [\n            os.path.join(_PROJECT_DIR,'models','saved_models','decoder.keras'),\n\
+      \            os.path.join(_PROJECT_DIR,'saved_models','decoder.keras'),\n  \
+      \          model_path,\n        ]\n        resolved = next((p for p in candidates\
+      \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
+      \     raise FileNotFoundError('[ML Decoder] No model found. Run: cd models &&\
+      \ python train.py --k 4')\n        print(f'[ML Decoder] Loading: {resolved}')\n\
+      \        self.decoder = tf.keras.models.load_model(resolved, compile=False,\
+      \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Decoder] Ready ({self.n}\
+      \ symbols -> {self.k} bits)')\n\n    def _bits_to_byte(self, bit_probs):\n \
+      \       return int(''.join(map(str, np.round(bit_probs).astype(int))), 2)\n\n\
+      \    def general_work(self, input_items, output_items):\n        in_syms, out_bytes\
+      \ = input_items[0], output_items[0]\n        if len(in_syms) > 0:\n        \
+      \    self._buffer.extend(in_syms.tolist())\n            self.consume(0, len(in_syms))\n\
+      \        n_process = min(len(self._buffer) // self.n, len(out_bytes))\n    \
+      \    if n_process == 0:\n            return 0\n        symbols = np.array(self._buffer[:n_process\
+      \ * self.n], dtype=np.complex64).reshape(n_process, self.n)\n        bit_probs\
+      \ = self.decoder.predict(symbols, verbose=0)  # (n_process, 4)\n        for\
+      \ i in range(n_process):\n            out_bytes[i] = np.uint8(self._bits_to_byte(bit_probs[i]))\n\
+      \        self._buffer = self._buffer[n_process * self.n:]\n        return n_process\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    lut_path: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('ML Decoder NN', 'blk', [('lut_path', "'C:\\\\Users\\\\vasan\\\\OneDrive\\\\Desktop\\\\SDR
+      ASSIGNMENT\\\\models\\\\saved_models\\\\decoder.keras'")], [('0', 'complex',
+      1)], [('0', 'byte', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 424.0]
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import tensorflow as tf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 32.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '""'
+    nconnections: '2'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1552, 460.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 612.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '2'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '16'
+    ymin: '0'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1368, 268.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_char_to_float_0, '0', blocks_float_to_complex_0, '0']
+- [blocks_char_to_float_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_char_to_float_0_0, '0', blocks_float_to_complex_0_0, '0']
+- [blocks_char_to_float_0_0, '0', qtgui_time_sink_x_0, '1']
+- [blocks_delay_0, '0', blocks_char_to_float_0, '0']
+- [blocks_delay_0, '0', epy_block_0, '0']
+- [blocks_float_to_complex_0, '0', qtgui_const_sink_x_0, '0']
+- [blocks_float_to_complex_0_0, '0', qtgui_const_sink_x_0, '1']
+- [blocks_throttle2_0, '0', blocks_delay_0, '0']
+- [blocks_vector_source_x_0, '0', blocks_throttle2_0, '0']
+- [channels_channel_model_0, '0', epy_block_1, '0']
+- [channels_channel_model_0, '0', qtgui_const_sink_x_0_0, '0']
+- [epy_block_0, '0', channels_channel_model_0, '0']
+- [epy_block_1, '0', blocks_char_to_float_0_0, '0']
+- [epy_block_1, '0', blocks_file_sink_0, '0']
+- [epy_block_1, '0', blocks_vector_sink_x_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0

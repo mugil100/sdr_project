@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+*.log
+test_output.txt
+*.weights.h5
+# Keep models but perhaps ignore intermediate stuff if needed. 
+# We'll push the compiled .keras models since they are the assignment deliverable.
