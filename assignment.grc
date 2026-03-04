@@ -232,8 +232,14 @@ blocks:
   parameters:
     _source_code: "# ROBUST ENCODER: 1 byte -> 4 complex symbols\n# k=4 bits (values\
       \ 0-15), n=4 complex symbols\n\nimport numpy as np\nfrom gnuradio import gr\n\
-      import tensorflow as tf\nimport sys, os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/sdr\
-      \ lab/sdr lab'\n_MODELS_DIR  = os.path.join(_PROJECT_DIR, 'models')\nfor _p\
+      \ os\n\n_PROJECT_DIRS = [\n\
+      \    'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',\n\
+      \    '/n/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',\n\
+      \    '.',\n\
+      \    os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else '.'\n\
+      \ ]\n\
+      \ _PROJECT_DIR = next((p for p in _PROJECT_DIRS if os.path.exists(os.path.join(p, 'models'))), '.')\n\
+      \ _MODELS_DIR  = os.path.join(_PROJECT_DIR, 'models')\nfor _p\
       \ in [_PROJECT_DIR, _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0,\
       \ _p)\n\ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n\
       \    CUSTOM_OBJECTS = {}\n\nclass blk(gr.basic_block):\n    def __init__(self,\
@@ -261,7 +267,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    lut_path: '''n:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\flat_fading_results\encoder_fading.keras'''
+    lut_path: '""'
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -280,13 +286,13 @@ blocks:
     _source_code: "# ML NEURAL NETWORK DECODER: Uses decoder.keras directly\n# k=4\
       \ bits (values 0-15), actual NN decoder (handles freq offset + fading)\n\nimport\
       \ numpy as np\nfrom gnuradio import gr\nimport tensorflow as tf\nimport sys,\
-      \ os\n\n_PROJECT_DIRS = [
-    'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',
-    '/n/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',
-    '.',
-    os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else '.'
-]
-_PROJECT_DIR = next((p for p in _PROJECT_DIRS if os.path.exists(os.path.join(p, 'models'))), '.')\n\
+      \ os\n\n_PROJECT_DIRS = [\n\
+      \    'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',\n\
+      \    '/n/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',\n\
+      \    '.',\n\
+      \    os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else '.'\n\
+      \ ]\n\
+      \ _PROJECT_DIR = next((p for p in _PROJECT_DIRS if os.path.exists(os.path.join(p, 'models'))), '.')\n\
       _MODELS_DIR  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR,\
       \ _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\
       \ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n  \
