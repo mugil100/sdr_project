@@ -1,0 +1,181 @@
+
+======================================================================
+TESTING ALL CHANNEL TYPES (Model Suffix: '')
+======================================================================
+======================================================================
+ML Communication System — Test (AWGN channel, SNR=16.0 dB)
+======================================================================
+  Encoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\encoder.keras
+  Decoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\decoder.keras
+======================================================================
+
+Testing 16 messages ...
+Channel: awgn | SNR: 16.0 dB
+
+Idx   Orig     Decoded    Match
+--------------------------------------
+0     0        0          OK
+1     34       34         OK
+2     68       68         OK
+3     102      102        OK
+4     136      136        OK
+5     170      170        OK
+6     204      204        OK
+7     238      238        OK
+8     17       17         OK
+9     51       51         OK
+10    85       85         OK
+11    119      119        OK
+12    153      153        OK
+13    187      187        OK
+14    221      221        OK
+15    255      255        OK
+--------------------------------------
+
+Accuracy: 16/16 (100.0%)
+BER:      0.000000
+======================================================================
+======================================================================
+ML Communication System — Test (PHASE channel, SNR=16.0 dB)
+======================================================================
+  Encoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\encoder.keras
+  Decoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\decoder.keras
+======================================================================
+
+Testing 16 messages ...
+Channel: phase | SNR: 16.0 dB
+
+Idx   Orig     Decoded    Match
+--------------------------------------
+0     0        253        FAIL
+1     34       34         OK
+2     68       187        FAIL
+3     102      225        FAIL
+4     136      119        FAIL
+5     170      85         FAIL
+6     204      55         FAIL
+7     238      17         FAIL
+8     17       168        FAIL
+9     51       119        FAIL
+10    85       186        FAIL
+11    119      119        OK
+12    153      152        FAIL
+13    187      11         FAIL
+14    221      26         FAIL
+15    255      95         FAIL
+--------------------------------------
+
+Accuracy: 2/16 (12.5%)
+BER:      0.585938
+======================================================================
+======================================================================
+ML Communication System — Test (FREQ channel, SNR=16.0 dB)
+======================================================================
+  Encoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\encoder.keras
+  Decoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\decoder.keras
+======================================================================
+
+Testing 16 messages ...
+Channel: freq | SNR: 16.0 dB
+
+Idx   Orig     Decoded    Match
+--------------------------------------
+0     0        0          OK
+1     34       34         OK
+2     68       68         OK
+3     102      102        OK
+4     136      136        OK
+5     170      170        OK
+6     204      204        OK
+7     238      238        OK
+8     17       17         OK
+9     51       51         OK
+10    85       85         OK
+11    119      119        OK
+12    153      153        OK
+13    187      187        OK
+14    221      221        OK
+15    255      255        OK
+--------------------------------------
+
+Accuracy: 16/16 (100.0%)
+BER:      0.000000
+======================================================================
+======================================================================
+ML Communication System — Test (RAYLEIGH channel, SNR=16.0 dB)
+======================================================================
+  Encoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\encoder.keras
+  Decoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\decoder.keras
+======================================================================
+
+Testing 16 messages ...
+Channel: rayleigh | SNR: 16.0 dB
+
+Idx   Orig     Decoded    Match
+--------------------------------------
+0     0        164        FAIL
+1     34       34         OK
+2     68       177        FAIL
+3     102      156        FAIL
+4     136      115        FAIL
+5     170      69         FAIL
+6     204      33         FAIL
+7     238      17         FAIL
+8     17       238        FAIL
+9     51       55         FAIL
+10    85       234        FAIL
+11    119      153        FAIL
+12    153      153        OK
+13    187      187        OK
+14    221      225        FAIL
+15    255      255        OK
+--------------------------------------
+
+Accuracy: 4/16 (25.0%)
+BER:      0.539062
+======================================================================
+======================================================================
+ML Communication System — Test (COMPOSITE channel, SNR=16.0 dB)
+======================================================================
+  Encoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\encoder.keras
+  Decoder: N:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\models\saved_models\decoder.keras
+======================================================================
+
+Testing 16 messages ...
+Channel: composite | SNR: 16.0 dB
+
+Idx   Orig     Decoded    Match
+--------------------------------------
+0     0        160        FAIL
+1     34       30         FAIL
+2     68       75         FAIL
+3     102      153        FAIL
+4     136      19         FAIL
+5     170      186        FAIL
+6     204      137        FAIL
+7     238      83         FAIL
+8     17       168        FAIL
+9     51       51         OK
+10    85       85         OK
+11    119      19         FAIL
+12    153      152        FAIL
+13    187      187        OK
+14    221      221        OK
+15    255      27         FAIL
+--------------------------------------
+
+Accuracy: 4/16 (25.0%)
+BER:      0.359375
+======================================================================
+
+======================================================================
+SUMMARY
+======================================================================
+Channel      Accuracy     BER
+--------------------------------------
+awgn         100.0%       0.000000
+phase        12.5%       0.585938
+freq         100.0%       0.000000
+rayleigh     25.0%       0.539062
+composite    25.0%       0.359375
+======================================================================
