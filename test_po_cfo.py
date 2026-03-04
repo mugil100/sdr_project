@@ -102,9 +102,11 @@ def run_comparison():
         ax.grid(True, which="both", ls="-", alpha=0.5)
         ax.legend()
         
-    plt.tight_layout()
-    plt.savefig('po_cfo_comparison.png')
-    print("\nPlot saved to po_cfo_comparison.png")
+    # Create images directory if not exists
+    os.makedirs('images', exist_ok=True)
+    out_path = 'images/po_cfo_comparison.png'
+    plt.savefig(out_path, dpi=300, bbox_inches='tight')
+    print(f"\nPlot saved to {out_path}")
 
 if __name__ == "__main__":
     run_comparison()
