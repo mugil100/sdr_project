@@ -237,12 +237,12 @@ blocks:
       \ in [_PROJECT_DIR, _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0,\
       \ _p)\n\ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n\
       \    CUSTOM_OBJECTS = {}\n\nclass blk(gr.basic_block):\n    def __init__(self,\
-      \ model_path=os.path.join(_PROJECT_DIR,'models','saved_models','encoder.keras')):\n\
+      \ model_path=os.path.join(_PROJECT_DIR,'models','saved_models','encoder_fading.keras')):\n\
       \        gr.basic_block.__init__(self, name='ML Encoder',\n            in_sig=[np.uint8],\
-      \ out_sig=[np.complex64])\n        self.k = 4   # 4 bits \u2192 values 0-15\n\
+      \ out_sig=[np.complex64])\n        self.k = 8   #  8 bits \u2192 values 0-15\n\
       \        self.n = 4   # 4 complex symbols output\n        candidates = [\n \
-      \           os.path.join(_PROJECT_DIR,'models','saved_models','encoder.keras'),\n\
-      \            os.path.join(_PROJECT_DIR,'saved_models','encoder.keras'),\n  \
+      \           os.path.join(_PROJECT_DIR,'models','saved_models','encoder_fading.keras'),\n\
+      \            os.path.join(_PROJECT_DIR,'saved_models','encoder_fading.keras'),\n  \
       \          model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Encoder] No model found. Run: cd models &&\
@@ -253,7 +253,7 @@ blocks:
       \        in_bytes, out_symbols = input_items[0], output_items[0]\n        n_process\
       \ = min(len(in_bytes), len(out_symbols) // self.n)\n        if n_process ==\
       \ 0:\n            return 0\n        bits_batch = np.array([\n            [int(b)\
-      \ for b in format(int(v) & 0x0F, '04b')]  # 4 bits, 0-15 only\n            for\
+      \ for b in format(int(v) & 0xFF, '08b')]  # 4 bits, 0-15 only\n            for\
       \ v in in_bytes[:n_process]\n        ], dtype=np.float32)\n        encoded =\
       \ self.encoder.predict(bits_batch, verbose=0)\n        out_symbols[:n_process\
       \ * self.n] = encoded.flatten()\n        self.consume(0, n_process)\n      \
@@ -280,16 +280,16 @@ blocks:
     _source_code: "# ML NEURAL NETWORK DECODER: Uses decoder.keras directly\n# k=4\
       \ bits (values 0-15), actual NN decoder (handles freq offset + fading)\n\nimport\
       \ numpy as np\nfrom gnuradio import gr\nimport tensorflow as tf\nimport sys,\
-      \ os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/sdr lab/sdr lab'\n_MODELS_DIR\
+      \ os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT'\n_MODELS_DIR\
       \  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR, _MODELS_DIR]:\n\
       \    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\ntry:\n    from\
       \ autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n    CUSTOM_OBJECTS\
-      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'models','saved_models','decoder.keras')):\n\
+      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'models','saved_models','decoder_fading.keras')):\n\
       \        gr.basic_block.__init__(self, name='ML Decoder NN',\n            in_sig=[np.complex64],\
-      \ out_sig=[np.uint8])\n        self.k = 4   # 4 bits \u2192 values 0-15\n  \
+      \ out_sig=[np.uint8])\n        self.k = 8   #  8 bits \u2192 values 0-15\n  \
       \      self.n = 4   # 4 complex symbols input\n        self._buffer = []\n \
-      \       candidates = [\n            os.path.join(_PROJECT_DIR,'models','saved_models','decoder.keras'),\n\
-      \            os.path.join(_PROJECT_DIR,'saved_models','decoder.keras'),\n  \
+      \       candidates = [\n            os.path.join(_PROJECT_DIR,'models','saved_models','decoder_fading.keras'),\n\
+      \            os.path.join(_PROJECT_DIR,'saved_models','decoder_fading.keras'),\n  \
       \          model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Decoder] No model found. Run: cd models &&\
