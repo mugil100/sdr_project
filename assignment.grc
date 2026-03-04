@@ -242,26 +242,26 @@ blocks:
       \ out_sig=[np.complex64])\n        self.k = 8   #  8 bits \u2192 values 0-15\n\
       \        self.n = 4   # 4 complex symbols output\n        candidates = [\n \
       \           os.path.join(_PROJECT_DIR,'flat_fading_results','encoder_fading.keras'),\n\
-      \            os.path.join(_PROJECT_DIR,'saved_models','encoder_fading.keras'),\n  \
-      \          model_path,\n        ]\n        resolved = next((p for p in candidates\
+      \            os.path.join(_PROJECT_DIR,'saved_models','encoder_fading.keras'),\n\
+      \            model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Encoder] No model found. Run: cd models &&\
-      \ python train.py --k 8 --use_fading')\n        print(f'[ML Encoder] Loading: {resolved}')\n\
-      \        self.encoder = tf.keras.models.load_model(resolved, compile=False,\
-      \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Encoder] Ready ({self.k}\
-      \ bits -> {self.n} symbols)')\n\n    def general_work(self, input_items, output_items):\n\
-      \        in_bytes, out_symbols = input_items[0], output_items[0]\n        n_process\
-      \ = min(len(in_bytes), len(out_symbols) // self.n)\n        if n_process ==\
-      \ 0:\n            return 0\n        bits_batch = np.array([\n            [int(b)\
-      \ for b in format(int(v) & 0xFF, '08b')]  # 4 bits, 0-15 only\n            for\
-      \ v in in_bytes[:n_process]\n        ], dtype=np.float32)\n        encoded =\
-      \ self.encoder.predict(bits_batch, verbose=0)\n        out_symbols[:n_process\
-      \ * self.n] = encoded.flatten()\n        self.consume(0, n_process)\n      \
-      \  return n_process * self.n\n"
+      \ python train.py --k 8 --use_fading')\n        print(f'[ML Encoder] Loading:\
+      \ {resolved}')\n        self.encoder = tf.keras.models.load_model(resolved,\
+      \ compile=False, custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Encoder]\
+      \ Ready ({self.k} bits -> {self.n} symbols)')\n\n    def general_work(self,\
+      \ input_items, output_items):\n        in_bytes, out_symbols = input_items[0],\
+      \ output_items[0]\n        n_process = min(len(in_bytes), len(out_symbols) //\
+      \ self.n)\n        if n_process == 0:\n            return 0\n        bits_batch\
+      \ = np.array([\n            [int(b) for b in format(int(v) & 0xFF, '08b')] \
+      \ # 4 bits, 0-15 only\n            for v in in_bytes[:n_process]\n        ],\
+      \ dtype=np.float32)\n        encoded = self.encoder.predict(bits_batch, verbose=0)\n\
+      \        out_symbols[:n_process * self.n] = encoded.flatten()\n        self.consume(0,\
+      \ n_process)\n        return n_process * self.n\n"
     affinity: ''
     alias: ''
     comment: ''
-    lut_path: '""'
+    lut_path: '''n:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\flat_fading_results\encoder_fading.keras'''
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -280,29 +280,36 @@ blocks:
     _source_code: "# ML NEURAL NETWORK DECODER: Uses decoder.keras directly\n# k=4\
       \ bits (values 0-15), actual NN decoder (handles freq offset + fading)\n\nimport\
       \ numpy as np\nfrom gnuradio import gr\nimport tensorflow as tf\nimport sys,\
-      \ os\n\n_PROJECT_DIR = 'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT'\n_MODELS_DIR\
-      \  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR, _MODELS_DIR]:\n\
-      \    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\ntry:\n    from\
-      \ autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n    CUSTOM_OBJECTS\
-      \ = {}\n\nclass blk(gr.basic_block):\n    def __init__(self, model_path=os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras')):\n\
+      \ os\n\n_PROJECT_DIRS = [
+    'n:/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',
+    '/n/SEM-6/SDR/ASSIGNMENT/SDR ASSIGNMENT/SDR ASSIGNMENT',
+    '.',
+    os.path.dirname(os.path.abspath(__file__)) if '__file__' in locals() else '.'
+]
+_PROJECT_DIR = next((p for p in _PROJECT_DIRS if os.path.exists(os.path.join(p, 'models'))), '.')\n\
+      _MODELS_DIR  = os.path.join(_PROJECT_DIR, 'models')\nfor _p in [_PROJECT_DIR,\
+      \ _MODELS_DIR]:\n    if _p not in sys.path:\n        sys.path.insert(0, _p)\n\
+      \ntry:\n    from autoencoder import CUSTOM_OBJECTS\nexcept ImportError:\n  \
+      \  CUSTOM_OBJECTS = {}\n\nclass blk(gr.basic_block):\n    def __init__(self,\
+      \ model_path=os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras')):\n\
       \        gr.basic_block.__init__(self, name='ML Decoder NN',\n            in_sig=[np.complex64],\
-      \ out_sig=[np.uint8])\n        self.k = 8   #  8 bits \u2192 values 0-15\n  \
-      \      self.n = 4   # 4 complex symbols input\n        self._buffer = []\n \
-      \       candidates = [\n            os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras'),\n\
-      \            os.path.join(_PROJECT_DIR,'saved_models','decoder_fading.keras'),\n  \
-      \          model_path,\n        ]\n        resolved = next((p for p in candidates\
+      \ out_sig=[np.uint8])\n        self.k = 8   #  8 bits \u2192 values 0-15\n \
+      \       self.n = 4   # 4 complex symbols input\n        self._buffer = []\n\
+      \        candidates = [\n            os.path.join(_PROJECT_DIR,'flat_fading_results','decoder_fading.keras'),\n\
+      \            os.path.join(_PROJECT_DIR,'saved_models','decoder_fading.keras'),\n\
+      \            model_path,\n        ]\n        resolved = next((p for p in candidates\
       \ if p and os.path.exists(p)), None)\n        if resolved is None:\n       \
       \     raise FileNotFoundError('[ML Decoder] No model found. Run: cd models &&\
-      \ python train.py --k 8 --use_fading')\n        print(f'[ML Decoder] Loading: {resolved}')\n\
-      \        self.decoder = tf.keras.models.load_model(resolved, compile=False,\
-      \ custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Decoder] Ready ({self.n}\
-      \ symbols -> {self.k} bits)')\n\n    def _bits_to_byte(self, bit_probs):\n \
-      \       return int(''.join(map(str, np.round(bit_probs).astype(int))), 2)\n\n\
-      \    def general_work(self, input_items, output_items):\n        in_syms, out_bytes\
-      \ = input_items[0], output_items[0]\n        if len(in_syms) > 0:\n        \
-      \    self._buffer.extend(in_syms.tolist())\n            self.consume(0, len(in_syms))\n\
-      \        n_process = min(len(self._buffer) // self.n, len(out_bytes))\n    \
-      \    if n_process == 0:\n            return 0\n        symbols = np.array(self._buffer[:n_process\
+      \ python train.py --k 8 --use_fading')\n        print(f'[ML Decoder] Loading:\
+      \ {resolved}')\n        self.decoder = tf.keras.models.load_model(resolved,\
+      \ compile=False, custom_objects=CUSTOM_OBJECTS)\n        print(f'[ML Decoder]\
+      \ Ready ({self.n} symbols -> {self.k} bits)')\n\n    def _bits_to_byte(self,\
+      \ bit_probs):\n        return int(''.join(map(str, np.round(bit_probs).astype(int))),\
+      \ 2)\n\n    def general_work(self, input_items, output_items):\n        in_syms,\
+      \ out_bytes = input_items[0], output_items[0]\n        if len(in_syms) > 0:\n\
+      \            self._buffer.extend(in_syms.tolist())\n            self.consume(0,\
+      \ len(in_syms))\n        n_process = min(len(self._buffer) // self.n, len(out_bytes))\n\
+      \        if n_process == 0:\n            return 0\n        symbols = np.array(self._buffer[:n_process\
       \ * self.n], dtype=np.complex64).reshape(n_process, self.n)\n        bit_probs\
       \ = self.decoder.predict(symbols, verbose=0)  # (n_process, 4)\n        for\
       \ i in range(n_process):\n            out_bytes[i] = np.uint8(self._bits_to_byte(bit_probs[i]))\n\
@@ -310,13 +317,13 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    lut_path: ''
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_path: '''n:\SEM-6\SDR\ASSIGNMENT\SDR ASSIGNMENT\SDR ASSIGNMENT\flat_fading_results\decoder_fading.keras'''
   states:
-    _io_cache: ('ML Decoder NN', 'blk', [('lut_path', "'C:\\\\Users\\\\vasan\\\\OneDrive\\\\Desktop\\\\SDR
-      ASSIGNMENT\\\\models\\\\saved_models\\\\decoder.keras'")], [('0', 'complex',
-      1)], [('0', 'byte', 1)], '', [])
+    _io_cache: ('ML Decoder NN', 'blk', [('model_path', "'n:/SEM-6/SDR/ASSIGNMENT/SDR
+      ASSIGNMENT/SDR ASSIGNMENT\\\\flat_fading_results\\\\decoder_fading.keras'")],
+      [('0', 'complex', 1)], [('0', 'byte', 1)], '', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
